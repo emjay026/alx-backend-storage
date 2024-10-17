@@ -7,4 +7,4 @@ FROM
 GROUP BY 
     origin                                       -- Group by origin to aggregate data
 ORDER BY 
-    total_fans DESC;                            -- Order by total fans in descending order
+    nb_fans DESC;                            -- Order by total fans in descending order
