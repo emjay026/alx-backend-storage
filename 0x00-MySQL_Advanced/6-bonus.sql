@@ -1,3 +1,7 @@
+-- This procedure adds a new correction score for a student. 
+-- It takes user_id, project_name, and score as input parameters.
+-- If the project_name does not exist, it will create a new project.
+
 DELIMITER $$
 
 CREATE PROCEDURE AddBonus(
