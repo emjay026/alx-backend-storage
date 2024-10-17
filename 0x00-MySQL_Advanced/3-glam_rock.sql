@@ -2,10 +2,9 @@
 SELECT 
     band_name,
     formed,
-    split
+    split,
+    style
 FROM 
-    metal_bands
-WHERE 
-    style = 'Glam rock'                                               -- Filter for bands with Glam rock style
+    metal_bands                                             -- Filter for bands with Glam rock style
 ORDER BY 
     band_name DESC;                                                   -- Rank by longevity in descending order
