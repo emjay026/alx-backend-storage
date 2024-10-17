@@ -1,10 +1,12 @@
--- Query to list bands with Glam rock as their main style, ranked by their longevity
+-- Query to list bands with any style containing 'glam', ranked by their longevity
 SELECT 
     band_name,
     formed,
     split,
     style
 FROM 
-    metal_bands                                             -- Filter for bands with Glam rock style
+    metal_bands
+WHERE 
+    style LIKE '%glam%'                                          -- Filter for bands where style contains 'glam'
 ORDER BY 
-    band_name DESC;                                                   -- Rank by longevity in descending order
+    band_name DESC;                                             -- Order by band_name in descending order
