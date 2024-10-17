@@ -10,4 +10,4 @@ FROM
 WHERE 
     style LIKE '%Glam rock%'                                          -- Filter for bands where style contains 'glam'
 ORDER BY 
-    band_name DESC;                                             -- Order by band_name in descending order
+    lifespan DESC;                                             -- Order by band_name in descending order
