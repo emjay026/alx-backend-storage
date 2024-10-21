@@ -7,4 +7,4 @@ var document = {
 var result = db.school.insertOne(document);
 
 // Print the output in the desired format
-print(`WriteResult({ "nInserted" : ${result.acknowledged ? result.insertedId ? 1 : 0 : 0} })`);
+print("WriteResult({ \"nInserted\" : " + result.insertedCount + " })");
