@@ -1,8 +1,5 @@
-// Get the database name from command line
-var dbName = db.getMongo().getDBName();
-
-// Switch to the specified database (already done implicitly)
-use dbName;
+// Switch to the specified database (this is handled by the mongo shell)
+use my_db;
 
 // Create a document to insert
 var document = {
@@ -10,4 +7,4 @@ var document = {
 };
 
 // Insert the document into the 'school' collection
-db.school.insertOne(document);
+var result = db.school.insertOne(document);
