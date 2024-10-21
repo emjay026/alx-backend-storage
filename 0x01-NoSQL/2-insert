@@ -1,7 +1,7 @@
-// Get the database name from the command line arguments
-var dbName = db.getSiblingDB(arguments[0]);
+// Get the database name from command line
+var dbName = db.getMongo().getDBName();
 
-// Switch to the specified database
+// Switch to the specified database (already done implicitly)
 use dbName;
 
 // Create a document to insert
