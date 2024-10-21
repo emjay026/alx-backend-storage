@@ -1,7 +1,7 @@
 // Update all documents in the 'school' collection with name = "Holberton school"
 var result = db.school.updateMany(
     { name: "Holberton school" }, // Query to find the documents
-    { $set: { address: "972 Mission street" } } // Update operation to add the address
+    { $set: { address: "973 Mission street" } } // Update operation to add the address
 );
 
 // Print the result in the desired format
