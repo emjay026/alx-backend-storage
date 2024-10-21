@@ -1,5 +1,5 @@
 // Get the count of documents in the 'school' collection
-var count = db.school.countDocuments();
+var count = db.school.count();
 
 // Print the count
 print(count);
