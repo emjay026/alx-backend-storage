@@ -4,10 +4,5 @@ var result = db.school.updateMany(
     { $set: { address: "972 Mission street" } } // Update operation to add the address
 );
 
-// Print the updated documents
-var updatedDocuments = db.school.find({ name: "Holberton school" });
-
-print("Updated documents:");
-updatedDocuments.forEach(function(doc) {
-    printjson(doc);
-});
+// Print the result in the desired format
+print(`WriteResult({ "nMatched" : ${result.matchedCount}, "nUpserted" : ${result.upsertedCount}, "nModified" : ${result.modifiedCount} })`);
