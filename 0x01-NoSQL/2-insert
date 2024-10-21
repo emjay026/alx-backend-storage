@@ -6,5 +6,5 @@ var document = {
 // Insert the document into the 'school' collection
 var result = db.school.insertOne(document);
 
-// Print the result of the insertion
-printjson(result);
+// Print the output in the desired format
+print(`WriteResult({ "nInserted" : ${result.insertedCount} })`);
