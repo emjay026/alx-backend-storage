@@ -1,0 +1,13 @@
+// Get the database name from the command line arguments
+var dbName = db.getSiblingDB(arguments[0]);
+
+// Switch to the specified database
+use dbName;
+
+// Create a document to insert
+var document = {
+    name: "Holberton school"
+};
+
+// Insert the document into the 'school' collection
+db.school.insertOne(document);
