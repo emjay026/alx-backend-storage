@@ -1,0 +1,5 @@
+// Switch to or create the database 'my_db'
+use my_db;
+
+// Output the message indicating the switch
+print("switched to db my_db");
