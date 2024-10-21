@@ -1,6 +1,3 @@
-// Switch to the specified database (this is handled by the mongo shell)
-use my_db;
-
 // Create a document to insert
 var document = {
     name: "Holberton school"
