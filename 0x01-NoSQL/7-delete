@@ -4,4 +4,4 @@ var result = db.school.deleteMany(
 );
 
 // Print the result in the desired format
-print(result);
+printjson(result);
