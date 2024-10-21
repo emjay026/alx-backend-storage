@@ -1,0 +1,7 @@
+// This script deletes all documents with name="Holberton school" from the school collection
+var result = db.school.deleteMany(
+    { name: "Holberton school" } // Query to find the documents to delete
+);
+
+// Print the result in the desired format
+print(`WriteResult({ "nDeleted" : ${result.deletedCount} })`);
