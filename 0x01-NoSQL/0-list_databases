@@ -6,6 +6,7 @@ const databases = db.adminCommand({ listDatabases: 1 }).databases;
 // Print the names of the databases
 databases.forEach(function(database) {
     // Get the size in GB
-    const sizeInGB = (database.sizeOnDisk / (1024 * 1024 * 1024)).toFixed(3);
-    print(database.name + "\t" + sizeInGB + "GB");
+    //const sizeInGB = (database.sizeOnDisk / (1024 * 1024 * 1024)).toFixed(3);
+    //print(database.name + "\t" + sizeInGB + "GB");
+    print(database.name);
 });
