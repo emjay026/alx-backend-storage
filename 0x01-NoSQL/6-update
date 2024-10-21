@@ -5,4 +5,4 @@ var result = db.school.updateMany(
 );
 
 // Print the result in the desired format
-printjson({result});
+printjson(result);
