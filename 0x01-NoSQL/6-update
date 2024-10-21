@@ -6,4 +6,4 @@ var result = db.school.updateMany(
 );
 
 // Print the result in the desired format
-print(`WriteResult({ "nMatched" : ${result.matchedCount}, "nUpserted" : ${result.upsertedCount}, "nModified" : ${result.modifiedCount} })`);
+print(`WriteResult({ "nMatched" : ${result.matchedCount}, "nUpserted" : ${result.upsertedCount ? 1 : 0}, "nModified" : ${result.modifiedCount} })`);
