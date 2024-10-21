@@ -1,0 +1,7 @@
+// Retrieve all documents from the 'school' collection
+var documents = db.school.find();
+
+// Print each document in a readable format
+documents.forEach(function(doc) {
+    printjson(doc);
+});
