@@ -14,21 +14,19 @@ def schools_by_topic(mongo_collection, topic):
     Retrieve a list of schools associated with a given topic.
 
     Parameters:
-    mongo_collection (pymongo.collection.Collection): The pymongo
-    collection object to query.
+    mongo_collection (pymongo.collection.Collection):
+    The pymongo collection object to query.
     topic (str): The topic to search for in school records.
 
     Returns:
-    list: A list of school names that have the specified topic.
+    list: A list of school documents that have the specified topic.
 
-    The function queries the MongoDB collection to find documents
-    where the 'topics' field contains the specified topic
-    and constructs a list of school names from the results.
+    Each document includes the school's ID, name, and topics.
     """
     # Query the collection for documents that contain the specified topic
     schools = mongo_collection.find({"topics": topic})
 
-    # Create a list of school names (or other relevant identifiers)
-    school_list = [school['name'] for school in schools]
+    # Create a list of school documents
+    school_list = list(schools)  # Convert cursor to a list
 
     return school_list
