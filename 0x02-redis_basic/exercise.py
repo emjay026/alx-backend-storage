@@ -1,31 +1,44 @@
 #!/usr/bin/env python3
 
 """
-cache.py
-
 This module provides a simple caching class that utilizes
 Redis for storage.
 The Cache class allows for storing various types of data
 (string, bytes, int, float)
 with a unique key generated using UUID and provides methods
-to retrieve the stored data
-with automatic conversion.
+to retrieve the stored datawith automatic conversion.
 """
 
 import redis
 import uuid
 from typing import Union, Callable, Optional
+from functools import wraps
+
+
+def count_calls(method: Callable) -> Callable:
+    """Decorator to count calls to methods and
+    track they are stored in Redis."""
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        # Increment the call count for this method in Redis
+        key = method.__qualname__
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+
+    return wrapper
 
 
 class Cache:
     """A simple caching class that uses Redis for storage."""
 
     def __init__(self) -> None:
-        """Initializes the Cache with a Redis client and
-        flushes the database."""
+        """Initializes the Cache with a Redis client
+        and flushes the database."""
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """Stores data in Redis and returns the generated key.
 
@@ -47,8 +60,8 @@ class Cache:
 
         Args:
             key (str): The key to retrieve the data for.
-            fn (Optional[Callable]): A function to convert the
-            data back to the desired format.
+            fn (Optional[Callable]): A function to convert
+            the data back to the desired format.
 
         Returns:
             Optional[Union[str, bytes, int, float]]: The retrieved
