@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 
 """
+cache.py
+
 This module provides a simple caching class that utilizes
 Redis for storage.
 The Cache class allows for storing various types of data
 (string, bytes, int, float)
-with a unique key generated using UUID.
+with a unique key generated using UUID and provides methods
+to retrieve the stored data
+with automatic conversion.
 """
 
 import redis
 import uuid
-from typing import Union
+from typing import Union, Callable, Optional
 
 
 class Cache:
@@ -35,3 +39,46 @@ class Cache:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
+
+    def get(self, key: str, fn: Optional[Callable] = None)\
+            -> Optional[Union[str, bytes, int, float]]:
+        """Retrieves data from Redis and applies an optional
+        conversion function.
+
+        Args:
+            key (str): The key to retrieve the data for.
+            fn (Optional[Callable]): A function to convert the
+            data back to the desired format.
+
+        Returns:
+            Optional[Union[str, bytes, int, float]]: The retrieved
+            and converted data, or None if the key does not exist.
+        """
+        value = self._redis.get(key)
+        if value is None:
+            return None
+        return fn(value) if fn else value
+
+    def get_str(self, key: str) -> Optional[str]:
+        """Retrieves data as a UTF-8 string.
+
+        Args:
+            key (str): The key to retrieve the data for.
+
+        Returns:
+            Optional[str]: The retrieved data as a UTF-8 string,
+            or None if the key does not exist.
+        """
+        return self.get(key, lambda d: d.decode("utf-8"))
+
+    def get_int(self, key: str) -> Optional[int]:
+        """Retrieves data as an integer.
+
+        Args:
+            key (str): The key to retrieve the data for.
+
+        Returns:
+            Optional[int]: The retrieved data as an integer,
+            or None if the key does not exist.
+        """
+        return self.get(key, int)
