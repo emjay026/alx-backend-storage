@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 """
-This module provides a simple caching class that utilizes
-Redis for storage.
-The Cache class allows for storing various types of data
-(string, bytes, int, float)
-with a unique key generated using UUID and provides methods
-to retrieve the stored datawith automatic conversion.
+This module provides a simple caching class that
+utilizes Redis for storage.
+The Cache class allows for storing various types of
+data (string, bytes, int, float)
+with a unique key generated using UUID and provides
+methods to retrieve the stored data with
+automatic conversion.
 """
 
 import redis
@@ -16,14 +17,14 @@ from functools import wraps
 
 
 def count_calls(method: Callable) -> Callable:
-    """Decorator to count calls to methods and
-    track they are stored in Redis."""
+    """Decorator to count calls to methods and track
+    they are stored in Redis."""
 
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         # Increment the call count for this method in Redis
         key = method.__qualname__
-        self._redis.incr(key)
+        self._redis.incr(key)  # Increment the call count in Redis
         return method(self, *args, **kwargs)
 
     return wrapper
@@ -33,8 +34,8 @@ class Cache:
     """A simple caching class that uses Redis for storage."""
 
     def __init__(self) -> None:
-        """Initializes the Cache with a Redis client
-        and flushes the database."""
+        """Initializes the Cache with a Redis client and
+        flushes the database."""
         self._redis = redis.Redis()
         self._redis.flushdb()
 
@@ -60,8 +61,8 @@ class Cache:
 
         Args:
             key (str): The key to retrieve the data for.
-            fn (Optional[Callable]): A function to convert
-            the data back to the desired format.
+            fn (Optional[Callable]): A function to convert the
+            data back to the desired format.
 
         Returns:
             Optional[Union[str, bytes, int, float]]: The retrieved
@@ -91,7 +92,7 @@ class Cache:
             key (str): The key to retrieve the data for.
 
         Returns:
-            Optional[int]: The retrieved data as an integer,
-            or None if the key does not exist.
+            Optional[int]: The retrieved data as an integer, or
+            None if the key does not exist.
         """
         return self.get(key, int)
