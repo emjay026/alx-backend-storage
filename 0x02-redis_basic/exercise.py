@@ -3,11 +3,11 @@
 """
 This module provides a simple caching class that
 utilizes Redis for storage.
-The Cache class allows for storing various types of
-data (string, bytes, int, float)
+The Cache class allows for storing various types
+of data (string, bytes, int, float)
 with a unique key generated using UUID and provides
-methods to retrieve the stored data with
-automatic conversion.
+methods to retrieve the stored data
+with automatic conversion.
 """
 
 import redis
@@ -24,8 +24,33 @@ def count_calls(method: Callable) -> Callable:
     def wrapper(self, *args, **kwargs):
         # Increment the call count for this method in Redis
         key = method.__qualname__
-        self._redis.incr(key)  # Increment the call count in Redis
+        self._redis.incr(key)  # Increment call count in Redis
         return method(self, *args, **kwargs)
+
+    return wrapper
+
+
+def call_history(method: Callable) -> Callable:
+    """Decorator to track the history of inputs and
+    outputs for a function."""
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        # Create input and output list keys
+        input_key = f"{method.__qualname__}:inputs"
+        output_key = f"{method.__qualname__}:outputs"
+
+        # Normalize input arguments to a string and
+        # push to inputs in Redis
+        self._redis.rpush(input_key, str(args))
+
+        # Execute the original method and get the output
+        output = method(self, *args, **kwargs)
+
+        # Push the output to outputs list in Redis
+        self._redis.rpush(output_key, str(output))
+
+        return output
 
     return wrapper
 
@@ -40,6 +65,7 @@ class Cache:
         self._redis.flushdb()
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """Stores data in Redis and returns the generated key.
 
@@ -61,8 +87,8 @@ class Cache:
 
         Args:
             key (str): The key to retrieve the data for.
-            fn (Optional[Callable]): A function to convert the
-            data back to the desired format.
+            fn (Optional[Callable]): A function to convert the data
+            back to the desired format.
 
         Returns:
             Optional[Union[str, bytes, int, float]]: The retrieved
@@ -92,7 +118,7 @@ class Cache:
             key (str): The key to retrieve the data for.
 
         Returns:
-            Optional[int]: The retrieved data as an integer, or
-            None if the key does not exist.
+            Optional[int]: The retrieved data as an integer,
+            or None if the key does not exist.
         """
         return self.get(key, int)
