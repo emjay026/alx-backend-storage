@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
 """
-This module provides a simple caching class that
-utilizes Redis for storage.
-The Cache class allows for storing various types
-of data (string, bytes, int, float)
-with a unique key generated using UUID and provides
-methods to retrieve the stored data
-with automatic conversion.
+This module provides a simple caching class
+that utilizes Redis for storage.
+The Cache class allows for storing various
+types of data (string, bytes, int, float)
+with a unique key generated using UUID and
+provides methods to retrieve the stored
+data with automatic conversion.
 """
 
 import redis
@@ -31,8 +31,8 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method: Callable) -> Callable:
-    """Decorator to track the history of inputs and
-    outputs for a function."""
+    """Decorator to track the history of inputs
+    and outputs for a function."""
 
     @wraps(method)
     def wrapper(self, *args, **kwargs):
@@ -55,12 +55,33 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
+def replay(method: Callable) -> None:
+    """Displays the history of calls to a particular function."""
+    # Retrieve the qualified name of the method
+    method_name = method.__qualname__
+
+    # Get input and output history from Redis
+    inputs = method.__self._redis.lrange(f"{method_name}:inputs", 0, -1)
+    outputs = method.__self._redis.lrange(f"{method_name}:outputs", 0, -1)
+
+    # Count the number of calls
+    call_count = len(inputs)
+
+    # Print the replay information
+    print(f"{method_name} was called {call_count} times:")
+
+    # Pair inputs with outputs and display them
+    for input_data, output_data in zip(inputs, outputs):
+        print(f"{method_name}(*{input_data.decode()})"
+              f"-> {output_data.decode()}")
+
+
 class Cache:
     """A simple caching class that uses Redis for storage."""
 
     def __init__(self) -> None:
-        """Initializes the Cache with a Redis client and
-        flushes the database."""
+        """Initializes the Cache with a Redis client
+        and flushes the database."""
         self._redis = redis.Redis()
         self._redis.flushdb()
 
@@ -70,8 +91,8 @@ class Cache:
         """Stores data in Redis and returns the generated key.
 
         Args:
-            data (Union[str, bytes, int, float]): The data to
-            store in the cache.
+            data (Union[str, bytes, int, float]):
+            The data to store in the cache.
 
         Returns:
             str: A unique key associated with the stored data.
@@ -87,8 +108,8 @@ class Cache:
 
         Args:
             key (str): The key to retrieve the data for.
-            fn (Optional[Callable]): A function to convert the data
-            back to the desired format.
+            fn (Optional[Callable]): A function to convert the
+            data back to the desired format.
 
         Returns:
             Optional[Union[str, bytes, int, float]]: The retrieved
